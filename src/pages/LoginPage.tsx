@@ -3,6 +3,11 @@ import { Box, TextField, Button, Typography } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext"; // AuthContext를 가져옵니다.
+import { jwtDecode, JwtPayload } from "jwt-decode";
+
+interface CustomJwtPayload extends JwtPayload {
+  role: string;
+}
 
 const LoginPage = () => {
   const [id, setId] = useState<string>("");
@@ -15,7 +20,7 @@ const LoginPage = () => {
     try {
       const response = await axios.post(
         "/login",
-        { username: id, password },
+        { userid: id, password },
         {
           headers: {
             "Content-Type": "application/json",
@@ -25,9 +30,13 @@ const LoginPage = () => {
 
       const token = response.headers.authorization?.split(" ")[1];
       if (token) {
+        const decodedToken = jwtDecode<CustomJwtPayload>(token);
+        const userRole = decodedToken.role; // If `role` is part of the payload
+
+        // const userRole = decodedToken.role;
         // 토큰을 로컬 스토리지에 저장
         localStorage.setItem("jwtToken", token);
-        login(); // 로그인 상태를 업데이트
+        login(token, userRole);
         // 로그인 성공 후 페이지 이동
         navigate("/"); // 루트 페이지로 이동
       }
@@ -38,14 +47,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      height="100vh"
-      flexDirection="column"
-      gap={2}
-    >
+    <Box display="flex" justifyContent="center" alignItems="center" height="100vh" flexDirection="column" gap={2}>
       <Typography variant="h4" sx={{ marginBottom: 4 }}>
         로그인
       </Typography>
@@ -56,22 +58,9 @@ const LoginPage = () => {
         </Typography>
       )}
 
-      <TextField
-        label="ID"
-        variant="outlined"
-        value={id}
-        onChange={(e) => setId(e.target.value)}
-        fullWidth
-      />
+      <TextField label="ID" variant="outlined" value={id} onChange={(e) => setId(e.target.value)} fullWidth />
 
-      <TextField
-        label="Password"
-        variant="outlined"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        fullWidth
-      />
+      <TextField label="Password" variant="outlined" type="password" value={password} onChange={(e) => setPassword(e.target.value)} fullWidth />
 
       <Button variant="contained" color="primary" onClick={handleLogin} fullWidth>
         로그인
