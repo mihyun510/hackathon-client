@@ -11,6 +11,7 @@ import {
   DialogTitle,
   Grid,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,9 +20,10 @@ import { useCart } from "../hooks";
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const { carts } = useCart();
+  const { carts, loading } = useCart();
 
   const totalPrice = carts.reduce(
+    //reduce : 누적값 구할 때 쓰는 거.,.
     (prev, cur) => prev + cur.price * cur.count,
     0
   );
@@ -37,6 +39,11 @@ const CartPage = () => {
     setIsModalOpen(false);
     navigate("/");
   };
+
+  // 로딩 상태 처리
+  if (loading) {
+    return <CircularProgress />;
+  }
 
   return (
     <>

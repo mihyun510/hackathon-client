@@ -48,7 +48,7 @@ const ProductPage = () => {
 
   const handlePushPurchasePage = () => {
     if (productId) {
-      navigate(`/purchase/${productId}`);
+      navigate(`/product/edit/${productId}`);
     }
   };
 
@@ -104,7 +104,7 @@ const ProductPage = () => {
             </Button>
             <Button
               variant="text"
-              // onClick={handlePushPurchasePage}
+              onClick={handlePushPurchasePage}
               color="info"
             >
               <Edit />

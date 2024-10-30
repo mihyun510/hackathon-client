@@ -1,7 +1,17 @@
 // App.tsx
 import { Route, Routes } from "react-router-dom";
 import { Layout } from "./components/shared";
-import { CartPage, HomePage, NotFoundPage, ProductCreatePage, ProductPage, PurchasePage, LoginPage, JoinPage } from "./pages";
+import {
+  CartPage,
+  HomePage,
+  NotFoundPage,
+  ProductCreatePage,
+  ProductPage,
+  ProductEditPage,
+  PurchasePage,
+  LoginPage,
+  JoinPage,
+} from "./pages";
 import { AuthProvider } from "./contexts/AuthContext"; // AuthProvider 추가
 
 //수정화면.
@@ -16,6 +26,7 @@ function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="join" element={<JoinPage />} />
           <Route path="product/:productId" element={<ProductPage />} />
+          <Route path="product/edit/:productId" element={<ProductEditPage />} />
           <Route path="purchase/:productId" element={<PurchasePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

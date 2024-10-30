@@ -25,9 +25,7 @@ const PurchasePage = () => {
 
   useEffect(() => {
     if (productId) {
-      getProduct(productId).then((response) =>
-        setProduct(response)
-      );
+      getProduct(productId).then((response) => setProduct(response));
     }
   }, [productId]);
 
